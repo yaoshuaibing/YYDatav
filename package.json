@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "rollup --watch --config build/rollup.config.js"
+    "dev": "cross-env NODE_ENV=developement rollup --watch --config build/rollup.config.js"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
     "url": "https://github.com/yaoshuaibing/YYDatav/issues"
   },
   "dependencies": {
+    "babel-loader": "^8.1.0"
   },
   "homepage": "https://github.com/yaoshuaibing/YYDatav#readme",
   "devDependencies": {
@@ -28,11 +29,16 @@
     "@babel/core": "^7.4.5",
     "@babel/plugin-transform-runtime": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "cross-env": "^7.0.2",
     "rollup-plugin-babel": "^4.3.3",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-terser": "^5.1.1",
     "rollup-plugin-vue": "^5.0.1",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.10",
+    "babel-core": "^6.26.3",
+    "babel-plugin-module-resolver": "^3.2.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-3": "^6.24.1"
   }
 }

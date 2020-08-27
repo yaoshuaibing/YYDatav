@@ -3,7 +3,7 @@ import commonjs from 'rollup-plugin-commonjs';
 const resolve = require('rollup-plugin-node-resolve')
 import babel from 'rollup-plugin-babel'
 export default {
-  input: 'src/App.vue',
+  input: 'src/index.js',
   output: {
     file: 'dist/index.js',
     format: 'umd',
