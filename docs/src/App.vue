@@ -1,14 +1,19 @@
 <template>
   <div id="app">
     123
-    <v-list></v-list>
-    <polling-data
-      :rowSize="2"
-      :header="header"
-      :data="data"
-      :pollingSpeed="60"
-      :delay="1000"
-    ></polling-data>
+    <div class="item">
+      <word-cloud-ball></word-cloud-ball>
+    </div>
+    <div class="item">
+      <polling-data :rowSize="2" :header="header" :data="data" :pollingSpeed="60" :delay="1000"></polling-data>
+    </div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
+    <div class="item"></div>
   </div>
 </template>
 
@@ -27,16 +32,24 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  height: 100%;
+  width: 100%;
+}
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background: rgba(14, 43, 67, 1);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
 }
 
-h1, h2 {
+h1,
+h2 {
   font-weight: normal;
 }
 
@@ -52,5 +65,11 @@ li {
 
 a {
   color: #42b983;
+}
+.item {
+  width: 480px;
+  height: 270px;
+  border: 1px solid #ccc;
+  margin: 20px;
 }
 </style>

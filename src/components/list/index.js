@@ -1,3 +1,3 @@
-import Main from "./Main.vue";
+import WordCloudBall from "./WordCloudBall.vue";
 
-export default Main
+export default WordCloudBall

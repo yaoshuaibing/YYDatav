@@ -11,9 +11,9 @@
     <!--身体-->
     <div class="polling-data-body">
       <div class="polling-body-wapper" ref="pollingBody" style="top: 0">
-        <div class="polling-body-cell-wapper" v-for="(data, index) in showData" :key="index" ref="bodyCell">
+        <div class="polling-body-cell-wapper" v-for="(data, index) in showData" :key="index" ref="bodyCell" :style="{height: `calc( 100% / ${ rowSize })`}">
           <div class="polling-cell" v-for="(field, i) in headerFileds" :key="i"
-            :style="{flexBasis: cellWidth + '%', height: 150/rowSize + 'px' }">
+            :style="{flexBasis: cellWidth + '%' }">
             <span>{{data[field]}}</span>
           </div>
         </div>
@@ -150,11 +150,17 @@ export default {
 </script>
 
 <style>
+.polling-data{
+  height: 100%;
+}
 .polling-data-header {
   border: 1px solid #333;
+  z-index: 33;
+  position: relative;
 }
 .polling-body-cell-wapper {
   border-bottom: 1px solid #333;
+  height: 100%;
 }
 .polling-body-cell-wapper:last-child {
   border-bottom-width: 0;
@@ -173,18 +179,19 @@ export default {
 .polling-cell {
   text-align: center;
   border-right: 1px solid #333;
+  color: #fff;
 }
 .polling-cell:last-child {
   border-right-width: 0px;
 }
 .polling-data-body {
   position: relative;
+  height: calc( 100% - 24px );
 }
 .polling-data {
   overflow: hidden;
 }
 .polling-data-body {
-  height: 150px;
   border: 1px solid #333;
   border-top-width: 0;
 }
@@ -195,7 +202,6 @@ export default {
   left: 0;
   width: 100%;
   box-sizing: border-box;
-  height: 150px;
-  z-index: -11;
+  height: 100%;
 }
 </style>
