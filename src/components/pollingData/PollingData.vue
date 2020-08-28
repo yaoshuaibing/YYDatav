@@ -1,19 +1,20 @@
 <template>
   <div class="polling-data">
     <!--头部-->
-    <div class="polling-data-header">
+    <div class="polling-data-header" :style="{height: headerHeight + 'px'}">
       <div class="polling-title-cell">
-        <div class="polling-cell" v-for="head in header" :key="head.name" :style="{'flex-basis': cellWidth + '%' }">
+        <div class="polling-cell" v-for="head in header" :key="head.name"
+          :style="{'flex-basis': cellWidth + '%', lineHeight: headerHeight+ 'px' }">
           <span>{{head.name}}</span>
         </div>
       </div>
     </div>
     <!--身体-->
-    <div class="polling-data-body">
+    <div class="polling-data-body" :style="{height: `calc( 100% - ${headerHeight}px )`}">
       <div class="polling-body-wapper" ref="pollingBody" style="top: 0">
-        <div class="polling-body-cell-wapper" v-for="(data, index) in showData" :key="index" ref="bodyCell" :style="{height: `calc( 100% / ${ rowSize })`}">
-          <div class="polling-cell" v-for="(field, i) in headerFileds" :key="i"
-            :style="{flexBasis: cellWidth + '%' }">
+        <div class="polling-body-cell-wapper" v-for="(data, index) in showData" :key="index" ref="bodyCell"
+          :style="{height: `calc( 100% / ${ rowSize })`, background: getBack(showList[index])}">
+          <div class="polling-cell" v-for="(field, i) in headerFileds" :key="i" :style="{flexBasis: cellWidth + '%' }">
             <span>{{data[field]}}</span>
           </div>
         </div>
@@ -54,6 +55,10 @@ export default {
     pollingSpeed: { // 每条滚动的时间间隔
       type: Number,
       default: 20
+    },
+    headerHeight: {
+      type: Number,
+      default: 40
     }
   },
   data () {
@@ -91,6 +96,9 @@ export default {
     }
   },
   methods: {
+    getBack (index) {
+      return index % 2 === 0 ? 'rgb(22, 56, 132)' : 'rgba(21, 46, 82, 0)'
+    },
     scroll () {
       // 开启滚动
       const { delay, everyDelay, pollingSpeed } = this
@@ -107,10 +115,10 @@ export default {
             this.pollingSpeedTimer()
             if (this.showList[this.showList.length - 2] === this.data.length - 1) {
               // 此时最后条数据出现在了屏幕上
-              this.delayTimer = animation( ()=> {
+              this.delayTimer = animation(() => {
                 this.scroll()
                 this.delayTimer()
-              }, delay )
+              }, delay)
             } else {
               // 这里控制每条数据的停留时间
               this.everyDelayTimer = animation(() => {
@@ -150,13 +158,14 @@ export default {
 </script>
 
 <style>
-.polling-data{
+.polling-data {
   height: 100%;
 }
 .polling-data-header {
   border: 1px solid #333;
   z-index: 33;
   position: relative;
+  border-bottom-width: 0;
 }
 .polling-body-cell-wapper {
   border-bottom: 1px solid #333;
@@ -172,21 +181,33 @@ export default {
   justify-content: space-between;
   background: #efeffe;
 }
+.polling-title-cell {
+  height: 100%;
+  background: rgb(36, 103, 204);
+}
 .polling-body-wapper {
-  border: 1px solid #333;
+  border: 1px solid #fff;
   border-top-width: 0;
 }
 .polling-cell {
   text-align: center;
-  border-right: 1px solid #333;
+  border-right: 1px solid #fff;
   color: #fff;
 }
+.polling-body-wapper .polling-cell {
+  text-align: center;
+  border-right: 1px solid #fff;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .polling-cell:last-child {
   border-right-width: 0px;
 }
 .polling-data-body {
   position: relative;
-  height: calc( 100% - 24px );
 }
 .polling-data {
   overflow: hidden;

@@ -5,7 +5,7 @@
       <word-cloud-ball></word-cloud-ball>
     </div>
     <div class="item">
-      <polling-data :rowSize="2" :header="header" :data="data" :pollingSpeed="60" :delay="1000"></polling-data>
+      <polling-data :rowSize="3" :header="header" :data="data" :pollingSpeed="60" :delay="1000"></polling-data>
     </div>
     <div class="item"></div>
     <div class="item"></div>
