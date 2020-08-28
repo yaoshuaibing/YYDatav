@@ -2,6 +2,7 @@
   <div id="app">
     123
     <v-list></v-list>
+    <polling-data></polling-data>
   </div>
 </template>
 

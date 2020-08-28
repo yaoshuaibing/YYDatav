@@ -1,6 +1,6 @@
 import VList from './components/list';
-
-const components = [VList]
+import Main from "./components/pollingData/index";
+const components = [VList, Main]
 
 const install = function (Vue) {
   components.forEach(component => {
