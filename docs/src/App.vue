@@ -2,16 +2,25 @@
   <div id="app">
     123
     <v-list></v-list>
-    <polling-data></polling-data>
+    <polling-data
+      :rowSize="2"
+      :header="header"
+      :data="data"
+      :pollingSpeed="60"
+      :delay="1000"
+    ></polling-data>
   </div>
 </template>
 
 <script>
+import { header, data } from "./mock/pollingData";
 export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      header,
+      data
     }
   }
 }

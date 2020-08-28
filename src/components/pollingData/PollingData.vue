@@ -27,39 +27,41 @@ import { getRect } from "../../utils/domOpt";
 import { animation } from "../../utils/clock";
 export default {
   name: 'polling-data',
+  props: {
+    rowSize: {
+      require: true,
+      type: Number,
+      default: 3
+    },
+    header: {
+      require: true,
+      type: Array,
+      default: () => []
+    },
+    data: {
+      require: true,
+      type: Array,
+      default: () => []
+    },
+    delay: {  // 全部数据滚动完毕停留时间, 单位是毫秒
+      type: Number,
+      default: 0
+    },
+    everyDelay: {  // 每条滚动到顶部时的停留时间，单位时毫秒
+      type: Number,
+      default: 200
+    },
+    pollingSpeed: { // 每条滚动的时间间隔
+      type: Number,
+      default: 20
+    }
+  },
   data () {
     return {
-      dataField: ["name", "num"],
-      header: [
-        {
-          name: "产品",
-          prop: "name"
-        },
-        {
-          name: "数据",
-          prop: "num"
-        }
-      ],
-      datas: [
-        {
-          name: "活着",
-          num: "1"
-        },
-        {
-          name: "这就是生活",
-          num: "2"
-        },
-        {
-          name: "这就是美丽",
-          num: "3"
-        },
-        {
-          name: "这就是明",
-          num: "4"
-        }
-      ],
-      rowSize: 3,
-      showList: [0]
+      showList: [0],
+      delayTimer: null,
+      pollingSpeedTimer: null,
+      everyDelayTimer: null
     }
   },
   created () {
@@ -67,51 +69,65 @@ export default {
   },
   computed: {
     cellWidth () {
-      return 100 / this.dataField.length
+      return 100 / this.headerFileds.length
     },
     calcRowSize () {
-      return this.rowSize > this.datas.length ? this.datas.length - 1 : this.rowSize
+      return this.rowSize > this.data.length ? this.data.length - 1 : this.rowSize
     },
     showData () {
-      const { showList, datas } = this
-      const showData = showList.map(item => datas[item])
+      const { showList, data } = this
+      const showData = showList.map(item => data[item])
       return showData;
     },
-    headerFileds() {
+    headerFileds () {
       // 从 header 数据中获取表头和数据的对应属性
-      return this.header.map( item => item.prop )
+      return this.header.map(item => item.prop)
     }
   },
   mounted () {
-    this.scroll()
+    if (this.calcRowSize === this.rowSize) {
+      // 此时说明数据条数比传递进来的 rowSize 大
+      this.scroll()
+    }
   },
   methods: {
     scroll () {
       // 开启滚动
+      const { delay, everyDelay, pollingSpeed } = this
       const container = this.$refs.pollingBody
       const firstElm = this.$refs.bodyCell[0]
-      const timer = animation(() => {
+      this.pollingSpeedTimer = animation(() => {
         const height = getRect(firstElm).height
-        const top = parseInt(container.style.top)
-        if (top <= -(height-1)) {
+        const realSpeed = height / pollingSpeed
+        const top = parseFloat(container.style.top)
+        if (top <= -(height - 1)) {
           this.$nextTick(() => {
             container.style.top = 0
             this.changeShowList()
-            timer()
-            const timer1 = animation( () => {
-              this.scroll()
-              timer1()
-            }, 500 )
+            this.pollingSpeedTimer()
+            if (this.showList[this.showList.length - 2] === this.data.length - 1) {
+              // 此时最后条数据出现在了屏幕上
+              this.delayTimer = animation( ()=> {
+                this.scroll()
+                this.delayTimer()
+              }, delay )
+            } else {
+              // 这里控制每条数据的停留时间
+              this.everyDelayTimer = animation(() => {
+                this.scroll()
+                this.everyDelayTimer()
+              }, everyDelay)
+            }
           })
         } else {
           this.$nextTick(() => {
-            container.style.top = top - 1 + "px"
+            container.style.top = top - realSpeed + "px"
           })
         }
-      }, 20)
+      }, 1)
     },
     changeShowList () {
-      const len = this.datas.length;
+      const len = this.data.length;
       this.showList = this.showList.map(item => {
         let i = item + 1
         if (i >= len) {
@@ -125,8 +141,11 @@ export default {
       this.showList = new Array(this.calcRowSize + 1).fill(1).map((item, index) => index)
     }
   },
-
-
+  destroyed () {
+    this.delayTimer && this.delayTimer()
+    this.pollingSpeedTimer && this.pollingSpeedTimer()
+    this.everyDelayTimer && this.everyDelayTimer()
+  },
 }
 </script>
 
